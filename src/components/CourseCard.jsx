@@ -1,24 +1,50 @@
 import { Flame, MoreHorizontal } from "lucide-react";
 import { leadDestaque } from "../data/dashboardData";
 
+function getInitials(name) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join("");
+}
+
+function LeadAvatar({ nome, photoUrl }) {
+  if (photoUrl) {
+    return (
+      <img
+        src={photoUrl}
+        alt={nome}
+        className="h-11 w-11 rounded-lg border border-aurenGold/20 object-cover"
+      />
+    );
+  }
+  return (
+    <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg border border-aurenGold/20 bg-zinc-800 text-sm font-bold text-aurenGold">
+      {getInitials(nome)}
+    </div>
+  );
+}
+
 export default function CourseCard() {
   const temperaturaStyle = {
     Hot: {
       label: "Quente",
-      borderColor: "rgba(212, 175, 55, 0.12)",
-      glow: "0 0 0 1px rgba(38, 38, 38, 0.9)",
+      borderColor: "rgba(212, 175, 55, 0.20)",
+      glow: "0 0 0 1px rgba(38, 38, 38, 0.6)",
       badge: "bg-white/10 text-white border border-white/20 backdrop-blur-md font-bold",
     },
     Warm: {
       label: "Warm",
-      borderColor: "rgba(212, 175, 55, 0.75)",
-      glow: "0 0 0 1px rgba(212, 175, 55, 0.45), 0 0 24px rgba(212, 175, 55, 0.2)",
+      borderColor: "rgba(212, 175, 55, 0.20)",
+      glow: "0 0 0 1px rgba(212, 175, 55, 0.30)",
       badge: "bg-aurenGold/20 text-aurenGold border border-aurenGold/40",
     },
     Cold: {
       label: "Cold",
-      borderColor: "rgba(96, 165, 250, 0.75)",
-      glow: "0 0 0 1px rgba(96, 165, 250, 0.4), 0 0 24px rgba(96, 165, 250, 0.2)",
+      borderColor: "rgba(96, 165, 250, 0.20)",
+      glow: "0 0 0 1px rgba(96, 165, 250, 0.25)",
       badge: "bg-sky-500/20 text-sky-300 border border-sky-400/40",
     },
   };
@@ -41,7 +67,7 @@ export default function CourseCard() {
         style={{ borderColor: current.borderColor, boxShadow: current.glow }}
       >
         <div className="flex min-h-[72px] items-center gap-3">
-          <div className="h-11 w-11 rounded-lg bg-aurenGold/20" />
+          <LeadAvatar nome={leadDestaque.nome} photoUrl={leadDestaque.photoUrl} />
           <div className="flex min-h-[52px] flex-col justify-center">
             <p className="text-sm font-medium">{leadDestaque.nome}</p>
             <p className="text-xs text-zinc-400">{leadDestaque.segmento}</p>

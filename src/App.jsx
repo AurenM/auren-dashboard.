@@ -25,43 +25,39 @@ export default function App() {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <main className={`flex-1 min-w-0 bg-[#0F0F0F] ${isChat ? "flex flex-col overflow-hidden" : "overflow-y-auto custom-scrollbar"}`}>
-        <div className={`p-4 sm:p-6 lg:p-10 ${isChat ? "flex flex-col flex-1 min-h-0" : "mx-auto"}`}>
-          <Header
-            onMenuOpen={() => setSidebarOpen(true)}
-            title={isChat ? "Chat" : "Dashboard"}
-          />
-
-          {isChat ? (
-            <div className="flex-1 min-h-0 pb-4">
-              <Chat />
-            </div>
-          ) : (
+      {isChat ? (
+        /* ── Chat view: full height, no outer header ── */
+        <main className="flex flex-col flex-1 min-w-0 overflow-hidden bg-[#0F0F0F] p-3 sm:p-4">
+          <Chat onMenuOpen={() => setSidebarOpen(true)} />
+        </main>
+      ) : (
+        /* ── Dashboard view: with header, scrollable ── */
+        <main className="flex-1 min-w-0 overflow-y-auto custom-scrollbar bg-[#0F0F0F]">
+          <div className="mx-auto p-4 sm:p-6 lg:p-10">
+            <Header
+              onMenuOpen={() => setSidebarOpen(true)}
+              title="Dashboard"
+            />
             <section className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[1.8fr_1fr]">
-              {/* Coluna Principal */}
               <div className="flex flex-col gap-6">
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                   <CourseCard />
                   <ConsultationCard />
                 </div>
-
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-[0.8fr_1.2fr]">
                   <MyGroupCard />
                   <LearningProgressCard />
                 </div>
-
                 <InboxCard />
               </div>
-
-              {/* Coluna Lateral */}
               <div className="flex flex-col gap-6">
                 <HomeworkProgressCard />
                 <CalendarCard />
               </div>
             </section>
-          )}
-        </div>
-      </main>
+          </div>
+        </main>
+      )}
     </div>
   );
 }

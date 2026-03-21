@@ -85,10 +85,10 @@ export const melhoresClientes = [
 ];
 
 export const statusAbordagemEtapas = [
-  { id: 1, etapa: "Lead Qualificado", progressoDia: 25, progressoSemana: 40, cor: "#D4AF37" },
-  { id: 2, etapa: "Reunião Agendada", progressoDia: 55, progressoSemana: 68, cor: "#B9932F" },
-  { id: 3, etapa: "Proposta Enviada", progressoDia: 78, progressoSemana: 86, cor: "#E0BF5A" },
-  { id: 4, etapa: "Fechamento/Assinatura", progressoDia: 95, progressoSemana: 100, cor: "#F0D27A" },
+  { id: 1, etapa: "Lead Qualificado", initials: "LQ", progressoDia: 25, progressoSemana: 40, cor: "#D4AF37" },
+  { id: 2, etapa: "Reunião Agendada", initials: "RA", progressoDia: 55, progressoSemana: 68, cor: "#B9932F" },
+  { id: 3, etapa: "Proposta Enviada", initials: "PE", progressoDia: 78, progressoSemana: 86, cor: "#E0BF5A" },
+  { id: 4, etapa: "Fechamento/Assinatura", initials: "FA", progressoDia: 95, progressoSemana: 100, cor: "#F0D27A" },
 ];
 
 export const chatChannels = {
@@ -99,12 +99,28 @@ export const chatChannels = {
   webchat: { label: "WebChat", color: "#D4AF37", bg: "rgba(212,175,55,0.15)" },
 };
 
+export const temperaturaTags = {
+  hot: { label: "Quente", color: "#D4AF37", bg: "rgba(212,175,55,0.15)" },
+  warm: { label: "Morno", color: "#E07B39", bg: "rgba(224,123,57,0.15)" },
+  cold: { label: "Frio", color: "#60A5FA", bg: "rgba(96,165,250,0.15)" },
+};
+
+export const funnelTags = {
+  new: { label: "Novo Lead", color: "#9A9A9A", bg: "rgba(154,154,154,0.12)" },
+  waiting: { label: "Aguardando", color: "#9A9A9A", bg: "rgba(154,154,154,0.12)" },
+  proposal: { label: "Proposta", color: "#E0BF5A", bg: "rgba(224,191,90,0.12)" },
+  closing: { label: "Fechamento", color: "#D4AF37", bg: "rgba(212,175,55,0.15)" },
+  client: { label: "Cliente", color: "#4ADE80", bg: "rgba(74,222,128,0.12)" },
+};
+
 export const chatConversations = [
   {
     id: 1,
     name: "Rodrigo Viriato",
     avatar: "RV",
     channel: "whatsapp",
+    temperature: "hot",
+    funnel: "closing",
     lastMessage: "Perfeito! Até amanhã então para a call estratégica.",
     time: "09:41",
     unread: 2,
@@ -122,6 +138,8 @@ export const chatConversations = [
     name: "Helena M. Albuquerque",
     avatar: "HA",
     channel: "instagram",
+    temperature: "hot",
+    funnel: "proposal",
     lastMessage: "Adorei a proposta! Quando podemos fechar?",
     time: "08:55",
     unread: 1,
@@ -137,6 +155,8 @@ export const chatConversations = [
     name: "Guilherme S. Fontana",
     avatar: "GF",
     channel: "messenger",
+    temperature: "warm",
+    funnel: "waiting",
     lastMessage: "Pode me enviar o link da reunião?",
     time: "Ontem",
     unread: 0,
@@ -153,6 +173,8 @@ export const chatConversations = [
     name: "Marina L. Paiva",
     avatar: "MP",
     channel: "telegram",
+    temperature: "warm",
+    funnel: "client",
     lastMessage: "Muito obrigada pelo suporte!",
     time: "Ontem",
     unread: 0,
@@ -169,6 +191,8 @@ export const chatConversations = [
     name: "Carlos Eduardo Braga",
     avatar: "CB",
     channel: "webchat",
+    temperature: "cold",
+    funnel: "new",
     lastMessage: "Quero saber mais sobre o plano premium.",
     time: "Seg",
     unread: 3,

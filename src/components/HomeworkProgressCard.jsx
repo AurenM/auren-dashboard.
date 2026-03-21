@@ -30,6 +30,21 @@ function ProgressRing({ value, color }) {
   );
 }
 
+function StageAvatar({ initials, color }) {
+  return (
+    <div
+      className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg text-xs font-bold border"
+      style={{
+        background: `${color}18`,
+        borderColor: `${color}30`,
+        color: color,
+      }}
+    >
+      {initials}
+    </div>
+  );
+}
+
 export default function HomeworkProgressCard() {
   const [filtro, setFiltro] = useState("dia");
 
@@ -74,7 +89,7 @@ export default function HomeworkProgressCard() {
             type="button"
             className="flex w-full items-center gap-3 rounded-xl border border-aurenStroke bg-[#141414] p-2.5 text-left transition hover:border-aurenGold/60"
           >
-            <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-[#3A3422] to-[#1F1A12]" />
+            <StageAvatar initials={item.initials} color={item.cor} />
             <div className="flex-1">
               <p className="text-xs leading-4">{item.etapa}</p>
               <p className="text-[10px] text-zinc-500">Atualizado em tempo real</p>
