@@ -5,8 +5,8 @@ export default function CourseCard() {
   const temperaturaStyle = {
     Hot: {
       label: "Quente",
-      borderColor: "rgba(220, 38, 38, 0.75)",
-      glow: "0 0 0 1px rgba(220, 38, 38, 0.42), 0 0 24px rgba(220, 38, 38, 0.2)",
+      borderColor: "rgba(212, 175, 55, 0.12)",
+      glow: "0 0 0 1px rgba(38, 38, 38, 0.9)",
       badge: "bg-white/10 text-white border border-white/20 backdrop-blur-md font-bold",
     },
     Warm: {
@@ -36,7 +36,10 @@ export default function CourseCard() {
           <MoreHorizontal size={18} />
         </button>
       </div>
-      <div className="rounded-2xl border bg-[#141414] p-3" style={{ borderColor: current.borderColor, boxShadow: current.glow }}>
+      <div
+        className="rounded-2xl border bg-[#141414] p-3"
+        style={{ borderColor: current.borderColor, boxShadow: current.glow }}
+      >
         <div className="flex min-h-[72px] items-center gap-3">
           <div className="h-11 w-11 rounded-lg bg-aurenGold/20" />
           <div className="flex min-h-[52px] flex-col justify-center">
