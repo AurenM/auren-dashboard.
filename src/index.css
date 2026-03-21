@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100vh;
+}
+
+body {
+  background: #0a0a0a;
+  font-family: "Poppins", sans-serif;
+  color: #f5f5f5;
+}
+
+.glass-card {
+  background: #1a1a1a;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 1rem;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 6px 20px rgba(212, 175, 55, 0.06);
+  transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212, 175, 55, 0.65);
+  box-shadow: 0 10px 22px rgba(212, 175, 55, 0.08);
+}
+
+.menu-btn {
+  transition: all 0.22s ease;
+}
+
+.menu-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(212, 175, 55, 0.08);
+  color: #d4af37;
+  box-shadow: 0 8px 18px rgba(212, 175, 55, 0.08);
+}
+
+button {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, color 0.22s ease, background-color 0.22s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(212, 175, 55, 0.1);
+}
+
+.ring-chart {
+  width: 46px;
+  height: 46px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.ring-chart::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 9999px;
+  background: #1a1a1a;
+}
+
+.badge-shimmer {
+  position: relative;
+}
+
+.badge-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  background: linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
+  transform: translateX(-140%);
+  animation: badgeShimmer 2.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes badgeShimmer {
+  0%,
+  65% {
+    transform: translateX(-140%);
+  }
+  100% {
+    transform: translateX(140%);
+  }
+}
