@@ -125,6 +125,10 @@ export const chatConversations = [
     time: "09:41",
     unread: 2,
     online: true,
+    channelData: {
+      phone: "+55 (11) 99812-3344",
+      recado: "Empresário | Investidor | V7x Educação 🚀",
+    },
     messages: [
       { id: 1, from: "them", text: "Olá! Tudo bem? Vi que temos uma call marcada.", time: "09:30" },
       { id: 2, from: "me", text: "Sim! Às 10h. Vai ser sobre o alinhamento de tráfego.", time: "09:32" },
@@ -144,6 +148,12 @@ export const chatConversations = [
     time: "08:55",
     unread: 1,
     online: true,
+    channelData: {
+      username: "@helena.albuquerque",
+      bio: "Mentora de negócios | Palestrante | Fundadora @institutohelena ✨",
+      followers: "48,2 mil",
+      linkInBio: "https://linktree.com/helena.albuquerque",
+    },
     messages: [
       { id: 1, from: "them", text: "Oi! Vi a proposta que vocês enviaram.", time: "08:40" },
       { id: 2, from: "me", text: "Oi Helena! Ficou com alguma dúvida?", time: "08:45" },
@@ -161,6 +171,7 @@ export const chatConversations = [
     time: "Ontem",
     unread: 0,
     online: false,
+    channelData: {},
     messages: [
       { id: 1, from: "me", text: "Guilherme, confirmando nossa reunião de amanhã.", time: "14:00" },
       { id: 2, from: "them", text: "Confirmado! Qual o horário?", time: "14:10" },
@@ -179,6 +190,7 @@ export const chatConversations = [
     time: "Ontem",
     unread: 0,
     online: false,
+    channelData: {},
     messages: [
       { id: 1, from: "them", text: "Preciso de ajuda com o acesso à plataforma.", time: "11:00" },
       { id: 2, from: "me", text: "Claro! Vou te enviar o link de redefinição de senha.", time: "11:05" },
@@ -197,6 +209,7 @@ export const chatConversations = [
     time: "Seg",
     unread: 3,
     online: false,
+    channelData: {},
     messages: [
       { id: 1, from: "them", text: "Olá! Vim pelo site de vocês.", time: "10:00" },
       { id: 2, from: "me", text: "Seja bem-vindo! Como posso te ajudar?", time: "10:02" },
