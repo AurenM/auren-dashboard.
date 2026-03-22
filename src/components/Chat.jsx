@@ -4,8 +4,8 @@ import {
   Paperclip, Smile, Instagram, User, BellOff, Star, Ban,
   Trash, Trash2, Image, FileText, Mic, MapPin, ExternalLink,
   Users, Link2, ChevronLeft, X, CheckCheck, Maximize2, Minimize2,
-  Pin, PinOff, Bot, UserCheck, Calendar, Clock, Reply, Slash,
-  AlarmClock, StickyNote,
+  Pin, PinOff, Bot, UserCheck, Calendar, Reply, Slash,
+  AlarmClock, StickyNote, Filter, MessageCircle,
 } from "lucide-react";
 import { chatConversations, chatChannels, temperaturaTags, funnelTags } from "../data/dashboardData";
 
@@ -47,14 +47,12 @@ const EMOJI_LIST = [
   "😊","🥳","🤣","😇","🤩","😏","🙄","😬","🫶","💬",
 ];
 
-/* ─── Filter Chips ───────────────────────────────────────────────────────── */
-const FILTERS = [
-  { id: "all",       label: "Todos" },
-  { id: "whatsapp",  label: "WhatsApp" },
-  { id: "instagram", label: "Instagram" },
-  { id: "hot",       label: "Quente 🔥" },
-  { id: "proposal",  label: "Proposta" },
-  { id: "waiting",   label: "Aguardando" },
+/* ─── Filter Dropdown Options ────────────────────────────────────────────── */
+const FILTER_OPTS = [
+  { id: "whatsapp",  label: "WhatsApp",   icon: MessageCircle, color: "#25D366" },
+  { id: "instagram", label: "Instagram",  icon: Instagram,     color: "#E1306C" },
+  { id: "messenger", label: "Messenger",  icon: MessageCircle, color: "#006AFF" },
+  { id: "unread",    label: "Não Lidos",  icon: MessageCircle, color: "#D4AF37" },
 ];
 
 /* ─── Channel SVG Icons ─────────────────────────────────────────────────── */
@@ -438,24 +436,27 @@ export default function Chat({ onMenuOpen, focusMode, onFocusToggle }) {
   const [search, setSearch]         = useState("");
   const [activeFilter, setFilter]   = useState("all");
   const [pinnedIds, setPinnedIds]   = useState(new Set([1]));
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [menuOpen, setMenuOpen]     = useState(false);
-  const [attachOpen, setAttachOpen] = useState(false);
-  const [emojiOpen, setEmojiOpen]   = useState(false);
-  const [quickOpen, setQuickOpen]   = useState(false);
-  const [replyTo, setReplyTo]       = useState(null);
-  const [isTyping, setIsTyping]     = useState(false);
-  const [agentMode, setAgentMode]   = useState("human");
-  const [hoveredMsg, setHoveredMsg] = useState(null);
+  const [drawerOpen, setDrawerOpen]   = useState(false);
+  const [menuOpen, setMenuOpen]       = useState(false);
+  const [filterOpen, setFilterOpen]   = useState(false);
+  const [attachOpen, setAttachOpen]   = useState(false);
+  const [emojiOpen, setEmojiOpen]     = useState(false);
+  const [quickOpen, setQuickOpen]     = useState(false);
+  const [replyTo, setReplyTo]         = useState(null);
+  const [isTyping, setIsTyping]       = useState(false);
+  const [agentMode, setAgentMode]     = useState("human");
+  const [hoveredMsg, setHoveredMsg]   = useState(null);
 
   const messagesEndRef = useRef(null);
   const menuRef        = useRef(null);
+  const filterRef      = useRef(null);
   const attachRef      = useRef(null);
   const emojiRef       = useRef(null);
   const quickRef       = useRef(null);
   const typingTimer    = useRef(null);
 
   useClickOutside(menuRef,   useCallback(() => setMenuOpen(false),   []));
+  useClickOutside(filterRef, useCallback(() => setFilterOpen(false), []));
   useClickOutside(attachRef, useCallback(() => setAttachOpen(false), []));
   useClickOutside(emojiRef,  useCallback(() => setEmojiOpen(false),  []));
   useClickOutside(quickRef,  useCallback(() => setQuickOpen(false),  []));
@@ -546,6 +547,8 @@ export default function Chat({ onMenuOpen, focusMode, onFocusToggle }) {
     if (activeFilter === "all")       return true;
     if (activeFilter === "whatsapp")  return conv.channel === "whatsapp";
     if (activeFilter === "instagram") return conv.channel === "instagram";
+    if (activeFilter === "messenger") return conv.channel === "messenger";
+    if (activeFilter === "unread")    return conv.unread > 0;
     if (activeFilter === "hot")       return conv.temperature === "hot";
     if (activeFilter === "proposal")  return conv.funnel === "proposal";
     if (activeFilter === "waiting")   return conv.funnel === "waiting";
@@ -634,32 +637,62 @@ export default function Chat({ onMenuOpen, focusMode, onFocusToggle }) {
                 <Menu size={18} />
               </button>
             </div>
-            <label className="flex h-9 items-center rounded-xl border border-aurenStroke bg-[#141414] px-3 gap-2">
-              <Search size={13} className="text-zinc-500 flex-shrink-0" />
-              <input
-                className="w-full bg-transparent text-xs text-zinc-100 outline-none placeholder:text-zinc-500"
-                placeholder="Buscar conversa..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </label>
+            <div className="flex gap-2">
+              <label className="flex flex-1 h-9 items-center rounded-xl border border-aurenStroke bg-[#141414] px-3 gap-2">
+                <Search size={13} className="text-zinc-500 flex-shrink-0" />
+                <input
+                  className="w-full bg-transparent text-xs text-zinc-100 outline-none placeholder:text-zinc-500"
+                  placeholder="Buscar conversa..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </label>
 
-            {/* Filter chips */}
-            <div className="flex gap-1.5 mt-3 flex-wrap">
-              {FILTERS.map((f) => (
+              {/* Filter icon + dropdown */}
+              <div className="relative flex-shrink-0" ref={filterRef}>
                 <button
-                  key={f.id}
                   type="button"
-                  onClick={() => setFilter(f.id)}
-                  className={`rounded-full px-2.5 py-1 text-[10px] font-semibold whitespace-nowrap transition-all border ${
-                    activeFilter === f.id
-                      ? "bg-aurenGold text-[#111] border-aurenGold"
-                      : "border-aurenStroke text-zinc-400 hover:border-aurenGold/40 hover:text-aurenGold"
+                  onClick={() => setFilterOpen((v) => !v)}
+                  title="Filtrar conversas"
+                  className={`h-9 w-9 flex items-center justify-center rounded-xl border transition-all ${
+                    activeFilter !== "all"
+                      ? "border-aurenGold bg-aurenGold/15 text-aurenGold"
+                      : "border-aurenStroke bg-[#141414] text-zinc-500 hover:border-aurenGold/40 hover:text-aurenGold"
                   }`}
                 >
-                  {f.label}
+                  <Filter size={14} />
                 </button>
-              ))}
+
+                {filterOpen && (
+                  <div className="absolute right-0 top-full mt-1 z-50 w-48 rounded-2xl border border-aurenGold/10 bg-[#1A1A1A] shadow-2xl shadow-black/60 py-1 overflow-hidden dropdown-enter">
+                    <p className="px-4 py-2 text-[10px] uppercase tracking-wider text-zinc-600 border-b border-aurenStroke/40">Filtrar por</p>
+                    {FILTER_OPTS.map((f) => (
+                      <button
+                        key={f.id}
+                        type="button"
+                        onClick={() => { setFilter(activeFilter === f.id ? "all" : f.id); setFilterOpen(false); }}
+                        className={`flex w-full items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-white/5 ${
+                          activeFilter === f.id ? "text-aurenGold" : "text-zinc-300"
+                        }`}
+                      >
+                        <span className="h-2 w-2 rounded-full flex-shrink-0" style={{ background: f.color }} />
+                        <span className="font-poppins text-xs">{f.label}</span>
+                        {activeFilter === f.id && <span className="ml-auto text-[10px] text-aurenGold">✓</span>}
+                      </button>
+                    ))}
+                    <div className="border-t border-aurenStroke/40 mt-1 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => { setFilter("all"); setFilterOpen(false); }}
+                        className="flex w-full items-center gap-3 px-4 py-2.5 text-xs text-zinc-500 hover:bg-white/5 hover:text-zinc-300 transition-colors"
+                      >
+                        <X size={12} className="flex-shrink-0" />
+                        Limpar filtro
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -704,14 +737,27 @@ export default function Chat({ onMenuOpen, focusMode, onFocusToggle }) {
                 </button>
               )}
 
-              {/* Avatar + name → opens drawer */}
-              <button type="button" onClick={() => setDrawerOpen(true)} className="flex items-center gap-3 flex-1 min-w-0 text-left hover:opacity-80 transition-opacity">
+              {/* Avatar + name → opens drawer (no hover effect) */}
+              <button type="button" onClick={() => setDrawerOpen(true)} className="flex items-center gap-3 flex-1 min-w-0 text-left">
                 <div className="relative flex-shrink-0">
                   <Avatar initials={selected.avatar} photoUrl={selected.photoUrl} size="lg" />
                   <ChannelDot channel={selected.channel} borderColor="#111" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-playfair text-base font-bold text-white leading-tight truncate">{selected.name}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-playfair text-base font-bold text-white leading-tight truncate">{selected.name}</p>
+                    {/* Dynamic AI/Human icon badge next to name */}
+                    <span
+                      title={agentMode === "ai" ? "IA Atendendo" : "Humano Atendendo"}
+                      className={`flex-shrink-0 flex items-center justify-center h-5 w-5 rounded-full ${
+                        agentMode === "ai"
+                          ? "bg-violet-500/20 text-violet-300"
+                          : "bg-aurenGold/15 text-aurenGold"
+                      }`}
+                    >
+                      {agentMode === "ai" ? <Bot size={11} /> : <UserCheck size={11} />}
+                    </span>
+                  </div>
                   <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                     <ChannelIcon channel={selected.channel} />
                     <span className="text-[10px] text-zinc-500">{chatChannels[selected.channel]?.label}</span>
@@ -727,19 +773,21 @@ export default function Chat({ onMenuOpen, focusMode, onFocusToggle }) {
               </button>
 
               {/* Right controls */}
-              <div className="flex items-center gap-1 flex-shrink-0">
-                {/* AI / Human toggle */}
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                {/* AI / Human action button */}
                 <button
                   type="button"
                   onClick={() => setAgentMode((v) => v === "ai" ? "human" : "ai")}
-                  title={agentMode === "ai" ? "IA Atendendo — clique para Humano" : "Humano — clique para IA"}
-                  className={`flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold border transition-all ${
+                  className={`hidden sm:flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-[11px] font-semibold border transition-all whitespace-nowrap ${
                     agentMode === "ai"
-                      ? "bg-violet-500/15 border-violet-500/30 text-violet-300"
-                      : "bg-aurenGold/10 border-aurenGold/20 text-aurenGold"
+                      ? "bg-aurenGold/10 border-aurenGold/30 text-aurenGold hover:bg-aurenGold/20"
+                      : "bg-violet-500/10 border-violet-500/25 text-violet-300 hover:bg-violet-500/20"
                   }`}
                 >
-                  {agentMode === "ai" ? <><Bot size={11} /> IA</> : <><UserCheck size={11} /> Humano</>}
+                  {agentMode === "ai"
+                    ? <><UserCheck size={12} /> Assumir Atendimento</>
+                    : <><Bot size={12} /> Transferir para IA</>
+                  }
                 </button>
 
                 <button type="button" className="rounded-lg p-2 text-zinc-400 hover:bg-white/5 hover:text-aurenGold">
