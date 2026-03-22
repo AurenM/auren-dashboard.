@@ -737,25 +737,31 @@ export default function Chat({ onMenuOpen, focusMode, onFocusToggle }) {
                 </button>
               )}
 
-              {/* Avatar + name → opens drawer (no hover effect) */}
-              <button type="button" onClick={() => setDrawerOpen(true)} className="flex items-center gap-3 flex-1 min-w-0 text-left">
+              {/* Avatar + name → opens drawer — plain div, zero hover effect */}
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => setDrawerOpen(true)}
+                onKeyDown={(e) => e.key === "Enter" && setDrawerOpen(true)}
+                className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer"
+              >
                 <div className="relative flex-shrink-0">
                   <Avatar initials={selected.avatar} photoUrl={selected.photoUrl} size="lg" />
                   <ChannelDot channel={selected.channel} borderColor="#111" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="font-playfair text-base font-bold text-white leading-tight truncate">{selected.name}</p>
-                    {/* Dynamic AI/Human icon badge next to name */}
+                  <div className="flex items-center gap-2 leading-none">
+                    <p className="font-playfair text-base font-bold text-white truncate">{selected.name}</p>
+                    {/* Dynamic AI/Human icon — self-center aligns with text baseline */}
                     <span
                       title={agentMode === "ai" ? "IA Atendendo" : "Humano Atendendo"}
-                      className={`flex-shrink-0 flex items-center justify-center h-5 w-5 rounded-full ${
+                      className={`self-center flex-shrink-0 inline-flex items-center justify-center h-[18px] w-[18px] rounded-full ${
                         agentMode === "ai"
                           ? "bg-violet-500/20 text-violet-300"
                           : "bg-aurenGold/15 text-aurenGold"
                       }`}
                     >
-                      {agentMode === "ai" ? <Bot size={11} /> : <UserCheck size={11} />}
+                      {agentMode === "ai" ? <Bot size={10} /> : <UserCheck size={10} />}
                     </span>
                   </div>
                   <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
@@ -763,14 +769,13 @@ export default function Chat({ onMenuOpen, focusMode, onFocusToggle }) {
                     <span className="text-[10px] text-zinc-500">{chatChannels[selected.channel]?.label}</span>
                     {tempTag   && <Tag label={tempTag.label}   color={tempTag.color}   bg={tempTag.bg} />}
                     {funnelTag && <Tag label={funnelTag.label} color={funnelTag.color} bg={funnelTag.bg} />}
-                    {/* Status indicator */}
                     {isTyping
                       ? <span className="text-[10px] text-aurenGold font-medium animate-pulse">Digitando...</span>
                       : selected.online && <span className="text-[10px] text-emerald-400 font-medium">● Online</span>
                     }
                   </div>
                 </div>
-              </button>
+              </div>
 
               {/* Right controls */}
               <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -778,7 +783,7 @@ export default function Chat({ onMenuOpen, focusMode, onFocusToggle }) {
                 <button
                   type="button"
                   onClick={() => setAgentMode((v) => v === "ai" ? "human" : "ai")}
-                  className={`hidden sm:flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-[11px] font-semibold border transition-all whitespace-nowrap ${
+                  className={`no-lift hidden sm:flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-[11px] font-semibold border transition-colors whitespace-nowrap ${
                     agentMode === "ai"
                       ? "bg-aurenGold/10 border-aurenGold/30 text-aurenGold hover:bg-aurenGold/20"
                       : "bg-violet-500/10 border-violet-500/25 text-violet-300 hover:bg-violet-500/20"
@@ -790,15 +795,15 @@ export default function Chat({ onMenuOpen, focusMode, onFocusToggle }) {
                   }
                 </button>
 
-                <button type="button" className="rounded-lg p-2 text-zinc-400 hover:bg-white/5 hover:text-aurenGold">
+                <button type="button" className="no-lift rounded-lg p-2 text-zinc-400 hover:bg-white/5 hover:text-aurenGold transition-colors">
                   <Phone size={15} />
                 </button>
-                <button type="button" className="rounded-lg p-2 text-zinc-400 hover:bg-white/5 hover:text-aurenGold">
+                <button type="button" className="no-lift rounded-lg p-2 text-zinc-400 hover:bg-white/5 hover:text-aurenGold transition-colors">
                   <Video size={15} />
                 </button>
 
                 {/* Focus mode toggle */}
-                <button type="button" onClick={onFocusToggle} title={focusMode ? "Sair do Modo Foco" : "Modo Foco"} className="rounded-lg p-2 text-zinc-400 hover:bg-white/5 hover:text-aurenGold">
+                <button type="button" onClick={onFocusToggle} title={focusMode ? "Sair do Modo Foco" : "Modo Foco"} className="no-lift rounded-lg p-2 text-zinc-400 hover:bg-white/5 hover:text-aurenGold transition-colors">
                   {focusMode ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
                 </button>
 
@@ -807,7 +812,7 @@ export default function Chat({ onMenuOpen, focusMode, onFocusToggle }) {
                   <button
                     type="button"
                     onClick={() => setMenuOpen((v) => !v)}
-                    className={`rounded-lg p-2 hover:bg-white/5 transition-colors ${menuOpen ? "text-aurenGold bg-white/5" : "text-zinc-400 hover:text-aurenGold"}`}
+                    className={`no-lift rounded-lg p-2 hover:bg-white/5 transition-colors ${menuOpen ? "text-aurenGold bg-white/5" : "text-zinc-400 hover:text-aurenGold"}`}
                   >
                     <MoreHorizontal size={15} />
                   </button>
