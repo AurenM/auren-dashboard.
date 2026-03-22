@@ -1,5 +1,6 @@
 import {
   BookOpen,
+  Bot,
   CalendarDays,
   FileText,
   Home,
@@ -14,6 +15,7 @@ export const menuItems = [
   { id: "my-class", icon: BookOpen, label: "Minha Turma" },
   { id: "schedules", icon: CalendarDays, label: "Agenda" },
   { id: "notes", icon: FileText, label: "Notas" },
+  { id: "agents", icon: Bot, label: "Agentes" },
 ];
 
 export const communityItems = [

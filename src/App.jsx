@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Agents from "./components/Agents";
 import CalendarCard from "./components/CalendarCard";
 import Chat from "./components/Chat";
 import ConsultationCard from "./components/ConsultationCard";
@@ -15,7 +16,8 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chatFocusMode, setChatFocusMode] = useState(false);
 
-  const isChat = activeMenu === "chat";
+  const isChat   = activeMenu === "chat";
+  const isAgents = activeMenu === "agents";
 
   function handleMenuSelect(item) {
     setActiveMenu(item);
@@ -40,6 +42,10 @@ export default function App() {
             focusMode={chatFocusMode}
             onFocusToggle={() => setChatFocusMode((v) => !v)}
           />
+        </main>
+      ) : isAgents ? (
+        <main className="flex flex-col flex-1 min-w-0 overflow-hidden bg-[#0F0F0F]">
+          <Agents onMenuOpen={() => setSidebarOpen(true)} />
         </main>
       ) : (
         <main className="flex-1 min-w-0 overflow-y-auto custom-scrollbar bg-[#0F0F0F]">
